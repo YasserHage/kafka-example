@@ -22,4 +22,14 @@ public class NotificationService {
         log.info("Message sent to topic: {}, Id: {}, Message: {}.",
                 topicName, notification.getId(), notification.getMessage());
     }
+
+    public void sendBulkMessages(Integer repeat, String message) {
+        for (int i = 1; i <= 100; i++) {
+            for (int key = 1; key <= repeat; key++) {
+                kafkaTemplate.send(topicName, String.valueOf(key), message + " (" + i + ")");
+            }
+        }
+        log.info("Bulk messages sent to topic: {}, Repeat for {} IDs, Message: {}.",
+                topicName, repeat, message);
+    }
 }
