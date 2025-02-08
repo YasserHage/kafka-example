@@ -18,6 +18,7 @@
 
     <modules>
         <module>notification-producer</module>
+        <module>notification-consumer</module>
     </modules>
 
     <properties>
