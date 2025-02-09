@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.model.Notification;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ public class NotificationService {
     @Autowired
     KafkaTemplate<String, String> kafkaTemplate;
 
+    @Setter
     @Value("${kafka.topics.notification.name}")
     private String topicName;
 
