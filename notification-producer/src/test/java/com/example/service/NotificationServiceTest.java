@@ -4,13 +4,13 @@ import com.example.config.KafkaIntegrationTest;
 import com.example.model.Notification;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.config.TopicBuilder;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class NotificationServiceTest extends KafkaIntegrationTest {
 
     @Autowired
@@ -29,7 +29,7 @@ public class NotificationServiceTest extends KafkaIntegrationTest {
 
     private NewTopic topic;
 
-    @Before
+    @BeforeEach
     public void before() throws ExecutionException, InterruptedException {
         topic = TopicBuilder.name("test-topic-" + UUID.randomUUID()).build();
         adminClient.createTopics(Collections.singletonList(topic)).all().get();

@@ -2,7 +2,7 @@ package com.example.config;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
@@ -23,7 +23,7 @@ public abstract class KafkaIntegrationTest {
         registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeAll() {
         kafkaContainer.start();
         kafkaTemplate = new KafkaTemplate<>(producerFactory());
