@@ -14,9 +14,9 @@ import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX
 @Service
 public class NotificationConsumer {
 
-    private static final String ERROR_KEY = "error-test";
+    public static final String ERROR_KEY = "error-test";
 
-    @RetryableTopic(attempts = "5",
+    @RetryableTopic(attempts = "3",
             backoff = @Backoff(delay = 1000, multiplier = 2),
             include = {NotificationProcessException.class},
             topicSuffixingStrategy = SUFFIX_WITH_INDEX_VALUE)
