@@ -12,6 +12,10 @@ env:
   RELEASE_LABEL: ${{ github.sha }}
   APP_NAME: notification-consumer
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
