@@ -8,14 +8,19 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.kafka.KafkaContainer;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Testcontainers
 public abstract class KafkaIntegrationTest {
 
     protected static KafkaTemplate<String, String> kafkaTemplate;
+
+    @Container
     static KafkaContainer kafkaContainer = new KafkaContainer("apache/kafka-native:3.8.0");
 
     @DynamicPropertySource
@@ -25,7 +30,6 @@ public abstract class KafkaIntegrationTest {
 
     @BeforeAll
     public static void beforeAll() {
-        kafkaContainer.start();
         kafkaTemplate = new KafkaTemplate<>(producerFactory());
     }
 

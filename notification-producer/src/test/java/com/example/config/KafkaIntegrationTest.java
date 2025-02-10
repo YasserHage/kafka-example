@@ -8,16 +8,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.kafka.KafkaContainer;
 
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
+@Testcontainers
 public abstract class KafkaIntegrationTest {
 
     protected static AdminClient adminClient;
     protected static KafkaConsumer<String, String> kafkaConsumer;
+
+    @Container
     static KafkaContainer kafkaContainer = new KafkaContainer("apache/kafka-native:3.8.0");
 
     @DynamicPropertySource
@@ -27,7 +32,6 @@ public abstract class KafkaIntegrationTest {
 
     @BeforeAll
     public static void beforeAll() {
-        kafkaContainer.start();
         KafkaAdmin kafkaAdmin = new KafkaAdmin(Map.of(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG,
                 kafkaContainer.getBootstrapServers()));
         adminClient = AdminClient.create(kafkaAdmin.getConfigurationProperties());
