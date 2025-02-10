@@ -1,0 +1,65 @@
+name: notification-producer CI
+
+on:
+  push:
+    paths:
+      - 'notification-producer/**'
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  RELEASE_LABEL: ${{ github.sha }}
+  APP_NAME: notification-producer
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run Tests
+        working-directory: ${{ env.APP_NAME }}
+        run: mvn clean verify
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build JAR
+        working-directory: ${{ env.APP_NAME }}
+        run: mvn clean package -DskipTests
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and push
+        working-directory: ${{ env.APP_NAME }}
+        run: |
+          docker build . -t ${{ env.APP_NAME }}
+          docker tag ${{ env.APP_NAME }} ghcr.io/yasserhage/${{ env.APP_NAME }}:${{ env.RELEASE_LABEL }}
+          docker push ghcr.io/yasserhage/${{ env.APP_NAME }}:${{ env.RELEASE_LABEL }}
